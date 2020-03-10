@@ -1,5 +1,6 @@
 package ru.serj.currencyconversionservice.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 
 @RestController
+@Slf4j
 public class ConversionController {
 
     @Autowired
@@ -50,7 +52,7 @@ public class ConversionController {
 
 
         CurrencyConversionBean resp = proxy.retrieveExchangeValue(from, to);
-
+        log.info("resp:{}", resp);
         return new CurrencyConversionBean(resp.getId(),
                 from,
                 to,
