@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import ru.serj.currencyconversionservice.model.CurrencyConversionBean;
 
 //@FeignClient(name = "currency-exchange-service", url = "localhost:8000")
-//@FeignClient(name = "currency-exchange-service")
-@FeignClient(name = "zuul-gateway-server")
+//@FeignClient(name = "currency-exchange-service")                              // <------ Eureka
+@FeignClient(name = "zuul-gateway-server")                                      // <------ Zuul
 @RibbonClient(name = "zuul-gateway-server")
 public interface CurrencyExchangeServiceProxy {
 
-    //@GetMapping("/currency-exchange/{from}/to/{to}")
-    @GetMapping("/currency-exchange-service/currency-exchange/{from}/to/{to}") // through the Zuul proxy
+    //@GetMapping("/currency-exchange/{from}/to/{to}")                         // <------ Eureka
+    @GetMapping("/currency-exchange-service/currency-exchange/{from}/to/{to}") // <------ Zuul
     CurrencyConversionBean retrieveExchangeValue(@PathVariable("from") String from, @PathVariable("to") String to);
 
 }
