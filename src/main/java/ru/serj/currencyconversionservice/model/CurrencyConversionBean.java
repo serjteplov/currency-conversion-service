@@ -17,4 +17,8 @@ public class CurrencyConversionBean {
     BigDecimal quantity;
     BigDecimal totalCalculated;
     int port;
+
+    private String exchangeEnvironmentInfo;
+
+    private String conversionEnvironmentInfo;
 }
