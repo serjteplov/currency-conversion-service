@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import ru.serj.currencyconversionservice.gateway.ExchangeProxyEureka;
+import ru.serj.currencyconversionservice.gateway.ExchangeProxyDiscovery;
 import ru.serj.currencyconversionservice.gateway.ExchangeProxyUri;
 import ru.serj.currencyconversionservice.gateway.ExchangeProxyZuul;
 import ru.serj.currencyconversionservice.model.CurrencyConversionBean;
@@ -27,7 +27,7 @@ public class ConversionController {
     private ExchangeProxyZuul proxyZuul;
 
     @Autowired
-    private ExchangeProxyEureka proxyEureka;
+    private ExchangeProxyDiscovery proxyDiscovery;
 
     @Autowired
     private ExchangeProxyUri proxyUri;
@@ -54,7 +54,7 @@ public class ConversionController {
         uriVariables.put("from", from);
         uriVariables.put("to", to);
         ResponseEntity<CurrencyConversionBean> responseEntity =
-                new RestTemplate().getForEntity("http://" + exchangeHost+":"+ port + "/currency-exchange/{from}/to/{to}",
+                new RestTemplate().getForEntity("http://" + exchangeHost + ":" + port + "/currency-exchange/{from}/to/{to}",
                         CurrencyConversionBean.class, uriVariables);
         CurrencyConversionBean resp = responseEntity.getBody();
         return new CurrencyConversionBean(resp.getId(),
@@ -80,10 +80,10 @@ public class ConversionController {
                 resp.getPort(), resp.getExchangeEnvironmentInfo(), informationService.retrieveInstanceInfo());
     }
 
-    @GetMapping("eureka/from/{from}/to/{to}/quantity/{quantity}")
+    @GetMapping("discovery/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversionBean convertCurrencyFeignEureka(@PathVariable String from, @PathVariable String to,
                                                            @PathVariable BigDecimal quantity) {
-        CurrencyConversionBean resp = proxyEureka.retrieveExchangeValue(from, to);
+        CurrencyConversionBean resp = proxyDiscovery.retrieveExchangeValue(from, to);
         log.info("resp:{}", resp);
         return new CurrencyConversionBean(resp.getId(),
                 from,

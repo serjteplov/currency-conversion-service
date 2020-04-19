@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  YOUR_PROPERTY: value
+  YOUR_PROPERTY_2: value2
+  SERVER_PORT: "8100"
+  RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+  SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+  CURRENCY_EXCHANGE_SERVICE_URI: http://currency-exchange-service
+  SERVICE_URL_DEFAULT_ZONE: http://localhost666:666/eureka
+kind: ConfigMap
+metadata:
+  name: currency-conversion-service
+  namespace: micro

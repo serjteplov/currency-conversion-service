@@ -14,20 +14,21 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - image: serjteplov/currency-conversion-service:0.0.1-SNAPSHOT
-        imagePullPolicy: Always
+      - image: serjteplov/currency-conversion-service:0.0.2-SNAPSHOT
+        imagePullPolicy: Always # necessary for frequent updating
         name: currency-conversion-service
         env:
-          - name: SERVER_PORT
-            value: "8100"
-          - name: RABBIT_URI
-            value: amqp://guest:guest@rabbitmq:5672
+# we define these variables in configmap named 'currency-conversion-service'
+#          - name: SERVER_PORT
+#            value: "8100"
+#          - name: RABBIT_URI
+#            value: amqp://guest:guest@rabbitmq:5672
           - name: SPRING_ZIPKIN_BASE_URL
-            value: http://zipkin:9411/
-#          - name: CURRENCY_EXCHANGE_SERVICE_URI --------------- we can use another variable, see CurrencyExchangeUriProxy
-#            value: http://currency-exchange-service ----------- kubernetes local DNS
-          - name: SERVICE_URL_DEFAULT_ZONE
-            value: http://localhost666:666/eureka
+            value: http://zipkin:9411
+#          - name: CURRENCY_EXCHANGE_SERVICE_URI --------------- instead this in app we can use CURRENCY_EXCHANGE_SERVICE_SERVICE_HOST, which kubernetes automatically injects in container
+#            value: http://currency-exchange-service ----------- this uri resolves through kubernetes local DNS
+#          - name: SERVICE_URL_DEFAULT_ZONE
+#            value: http://localhost666:666/eureka
         ports:
           - name: liveness-port
             containerPort: 8100
@@ -48,7 +49,7 @@ metadata:
   name: currency-conversion-service
   namespace: micro
 spec:
-  type: NodePort # not LoadBalancer since we use ingress
+  type: NodePort # not LoadBalancer(strict access to pod from internet), since we use ingress
   ports:
     - port: 8100
       targetPort: 8100
