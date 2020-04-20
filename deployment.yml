@@ -14,7 +14,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-      - image: serjteplov/currency-conversion-service:0.0.2-SNAPSHOT
+      - image: serjteplov/currency-conversion-service:0.0.3-SNAPSHOT
         imagePullPolicy: Always # necessary for frequent updating
         name: currency-conversion-service
         env:
@@ -25,10 +25,12 @@ spec:
 #            value: amqp://guest:guest@rabbitmq:5672
           - name: SPRING_ZIPKIN_BASE_URL
             value: http://zipkin:9411
+          - name: SPRING_CLOUD_GCP_TRACE_ENABLED
+            value: "true"
 #          - name: CURRENCY_EXCHANGE_SERVICE_URI --------------- instead this in app we can use CURRENCY_EXCHANGE_SERVICE_SERVICE_HOST, which kubernetes automatically injects in container
 #            value: http://currency-exchange-service ----------- this uri resolves through kubernetes local DNS
-#          - name: SERVICE_URL_DEFAULT_ZONE
-#            value: http://localhost666:666/eureka
+          - name: SERVICE_URL_DEFAULT_ZONE
+            value: http://localhost666:666/eureka
         ports:
           - name: liveness-port
             containerPort: 8100
