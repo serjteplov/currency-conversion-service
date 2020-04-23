@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import ru.serj.currencyconversionservice.model.CurrencyConversionBean;
 
 @FeignClient(name = "zuul-gateway-server")
-@RibbonClient(name = "zuul-gateway-server")
+@RibbonClient(name = "zuul-gateway-server")  // already included in @FeignClient
 public interface ExchangeProxyZuul {
 
     @GetMapping("/currency-exchange-service/currency-exchange/{from}/to/{to}")
